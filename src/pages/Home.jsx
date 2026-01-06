@@ -75,9 +75,15 @@ const Home = () => {
 
       {/* Main container */}
       <div className="relative z-10 w-full max-w-6xl px-6">
-        <h1 className="text-4xl font-extrabold text-center text-gray-800 mb-12 drop-shadow-md">
-          Smart Healthcare Assistant
-        </h1>
+      <h1 className="text-center mb-12 drop-shadow-md">
+  <span className="block text-5xl font-extrabold text-gray-900 tracking-tight">
+    MediConnect
+  </span>
+  <span className="block mt-2 text-lg font-medium text-gray-600">
+    Smart Healthcare Assistant
+  </span>
+</h1>
+
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <PatientSection />

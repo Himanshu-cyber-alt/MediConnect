@@ -84,16 +84,18 @@ export default function PatientDashboard() {
             ? `Hi, ${profile.first_name}`
             : "Welcome, Patient"}
         </h1>
-       <button
-  onClick={handleLogout}
-  className="px-5 py-2 rounded-full text-sm font-medium 
-             text-gray-700 bg-white-70 backdrop-blur 
-             border border-gray-200 shadow-sm
-             hover:bg-red-700 hover:shadow-md
-             transition-all duration-200"
->
-  Logout
-</button>
+<div className="flex gap-3">
+  <motion.button
+    onClick={() => navigate("/assistant")}
+    whileHover={{ scale: 1.05 }}
+    className="px-6 py-2 rounded-full bg-black text-white text-sm font-medium
+               hover:bg-gray-800 transition"
+  >
+    AI Assistant
+  </motion.button>
+
+
+</div>
       </header>
 
       {/* Main */}
@@ -155,11 +157,11 @@ export default function PatientDashboard() {
         {/* Buttons */}
         <div className="flex justify-center gap-4 mt-16">
           <motion.button
-            onClick={() => navigate("/assistant")}
+            onClick={handleLogout}
             whileHover={{ scale: 1.05 }}
             className="px-6 py-3 rounded-full bg-black text-white text-sm font-medium tracking-wide hover:bg-gray-800 transition"
           >
-            Assistant
+             Logout
           </motion.button>
         </div>
       </main>

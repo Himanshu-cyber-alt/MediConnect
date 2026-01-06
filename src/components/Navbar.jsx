@@ -77,7 +77,7 @@ const Navbar = () => {
     { path: "/doctors", label: "Doctors", icon: User },
     { path: "/assistant", label: "Ask AI", icon: Bot },
     { path: "/profile", label: "Profile", icon: User }, // Changed icon to User to avoid dupes
-    { path: "/myappointments", label: "My Appts", icon: CalendarDays },
+    { path: "/myappointments", label: "My Appointments", icon: CalendarDays },
   ];
 
   return (
@@ -93,7 +93,7 @@ const Navbar = () => {
           {/* 1. LOGO */}
           <Link to="/dashboard" className="text-xl sm:text-2xl font-bold tracking-tight flex items-center space-x-2">
             <Stethoscope className="w-6 h-6 text-indigo-400" />
-            <span>Smart Healthcare</span>
+            <span>MediConnect</span>
           </Link>
 
           {/* 2. DESKTOP MENU (Hidden on Mobile) */}

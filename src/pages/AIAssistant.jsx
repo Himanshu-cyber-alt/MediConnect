@@ -115,12 +115,18 @@ export default function AIAssistant() {
           <h1 className="text-3xl font-semibold tracking-tight flex items-center gap-2">
             <Stethoscope className="text-black" /> AI Health Assistant
           </h1>
-          <button
-            onClick={() => navigate("/patientdashboard")}
-            className="text-sm font-medium text-gray-500 hover:text-gray-800 transition"
-          >
-            Back to Dashboard
-          </button>
+       
+           <motion.button
+             onClick={() => navigate("/dashboard")}
+             whileHover={{ scale: 1.05 }}
+             className="px-6 py-2 rounded-full bg-black text-white text-sm font-medium
+                        hover:bg-gray-800 transition"
+           >
+              Dashboard
+           </motion.button>
+         
+         
+       
         </header>
 
         {/* Main Content */}
