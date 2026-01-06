@@ -1,0 +1,61 @@
+# =========================
+# ENV files (VERY IMPORTANT)
+# =========================
+.env
+.env.local
+.env.development
+.env.production
+
+# =========================
+# Node modules
+# =========================
+node_modules/
+
+# =========================
+# Vite / React build
+# =========================
+dist/
+.vite/
+
+# =========================
+# Logs
+# =========================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =========================
+# OS / Editor files
+# =========================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# =========================
+# Firebase
+# =========================
+.firebase/
+firebase-debug.log
+
+# =========================
+# Python (AI backend)
+# =========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+
+# =========================
+# ML Models (OPTIONAL)
+# (Comment out if you WANT to push .pkl)
+# =========================
+# *.pkl
+
+# =========================
+# Misc
+# =========================
+coverage/
