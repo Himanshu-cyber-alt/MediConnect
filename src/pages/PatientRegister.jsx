@@ -167,6 +167,8 @@ export default function PatientRegister() {
         registerPatient({ email, password })
       ).unwrap();
 
+         console.log(res);
+
       localStorage.setItem("patientToken", res.token);
       localStorage.setItem("patient_id", res.patient.patient_id);
       localStorage.setItem("patient_email", email);
