@@ -2,7 +2,7 @@
 
 import axios from "axios";
 
-const API_URL = "https://smart-health-server.onrender.com/api/patients/profile/";
+const API_URL = "https://mediconnect-server-vtft.onrender.com/api/patients/profile/";
 
 
 const getAuthConfig = () => {
@@ -29,7 +29,7 @@ const createProfile = async (profileData) => {
 
 const updateProfile = async (patientId, profileData) => {
   const response = await axios.put(
-    'https://smart-health-server.onrender.com/api/patients' + patientId,
+    'https://mediconnect-server-vtft.onrender.com/api/patients' + patientId,
     profileData,
     getAuthConfig()
   );
@@ -42,7 +42,7 @@ const getProfile = async (patientId) => {
 
   console.log(patientId)
   const res = await axios.get(
-    'https://smart-health-server.onrender.com/api/patients/' + patientId,
+    'https://mediconnect-server-vtft.onrender.com/api/patients/' + patientId,
     getAuthConfig()
   );
   return res.data;
@@ -61,7 +61,7 @@ const getProfile = async (patientId) => {
 
 
 const register = async ({ email, password }) => {
-  const res = await axios.post("https://smart-health-server.onrender.com/api/patients/register", {
+  const res = await axios.post("https://mediconnect-server-vtft.onrender.com/api/patients/register", {
     email,
     password,
   });
@@ -71,7 +71,7 @@ const register = async ({ email, password }) => {
 
 const login = async ({ email, password }) => {
   
-  const res = await axios.post("https://smart-health-server.onrender.com/api/patients/login", {
+  const res = await axios.post("https://mediconnect-server-vtft.onrender.com/api/patients/login", {
     email,
     password,
   });

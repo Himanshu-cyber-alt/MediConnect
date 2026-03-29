@@ -279,7 +279,7 @@ export default function MyAppointment() {
           return;
         }
 
- const res = await fetch(`https://smart-health-server.onrender.com/api/appointments/${patientId}`);
+ const res = await fetch(`https://mediconnect-server-vtft.onrender.com/api/appointments/${patientId}`);
        
         if (!res.ok) throw new Error("Failed to fetch appointments.");
         

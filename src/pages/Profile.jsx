@@ -26,7 +26,7 @@ export default function Profile() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await fetch(`https://smart-health-server.onrender.com/api/patients/${patientId}`);
+        const res = await fetch(`https://mediconnect-server-vtft.onrender.com/api/patients/${patientId}`);
         const data = await res.json();
         setProfile(data || {});
       } catch (err) {
@@ -44,7 +44,7 @@ export default function Profile() {
 
   const handleUpdate = async () => {
     try {
-      const res = await fetch(`https://smart-health-server.onrender.com/api/patients/${patientId}`, {
+      const res = await fetch(`https://mediconnect-server-vtft.onrender.com/api/patients/${patientId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(profile),
