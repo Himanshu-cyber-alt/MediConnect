@@ -17,4 +17,4 @@ jobs:
         run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
 
       - name: Done
-        run: echo "Deployment triggered"
+        run: echo "Deployment is happen"
