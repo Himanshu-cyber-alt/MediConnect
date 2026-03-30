@@ -80,7 +80,7 @@ export const firebaseRegister = createAsyncThunk(
       const idToken = await result.user.getIdToken();
           
       const res = await axios.post(
-        "https://smart-health-server.onrender.com/api/auth/firebase",
+        "https://mediconnect-server-mgnb.onrender.com/api/auth/firebase",
         { token: idToken }
       );
      
