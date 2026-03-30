@@ -193,7 +193,7 @@ import { useLocation, useParams } from "react-router-dom";
 import io from "socket.io-client";
 import { Phone } from "lucide-react";
 
-const socket = io("https://mediconnect-server-vtft.onrender.com");
+const socket = io("https://mediconnect-server-mgnb.onrender.com");
 
 export default function PatientVideoCall() {
 

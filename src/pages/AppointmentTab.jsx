@@ -89,7 +89,7 @@ export default function AppointmentBooking() {
       const localDate = offsetDate.toISOString().split('T')[0];
       const time = selectedSlot;
 
-      const response = await fetch("https://mediconnect-server-vtft.onrender.com/api/appointments", {
+      const response = await fetch("https://mediconnect-server-mgnb.onrender.com/api/appointments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

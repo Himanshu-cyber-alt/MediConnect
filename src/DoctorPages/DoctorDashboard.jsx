@@ -193,7 +193,7 @@ import { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import { Phone, PhoneOff } from "lucide-react";
 
-const socket = io("https://mediconnect-server-vtft.onrender.com");
+const socket = io("https://mediconnect-server-mgnb.onrender.com");
 
 export default function DoctorDashboard() {
   const doctorEmail = localStorage.getItem("doctor_email");;

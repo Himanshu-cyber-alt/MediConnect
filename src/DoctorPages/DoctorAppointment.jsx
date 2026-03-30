@@ -24,7 +24,7 @@ export default function MyAppointment() {
 
         console.log(email)
      
-        const res = await fetch(`https://mediconnect-server-vtft.onrender.com/api/doctorappointments/${encodeURIComponent(email)}`);
+        const res = await fetch(`https://mediconnect-server-mgnb.onrender.com/api/doctorappointments/${encodeURIComponent(email)}`);
         if (!res.ok) throw new Error("Failed to fetch appointments.");
         
         const data = await res.json();

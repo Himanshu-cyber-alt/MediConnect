@@ -12,7 +12,7 @@ const Doctors = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const res = await fetch("https://mediconnect-server-vtft.onrender.com/api/doctors");
+        const res = await fetch("https://mediconnect-server-mgnb.onrender.com/api/doctors");
         if (res.ok) {
           const data = await res.json();
           setDoctors(data);
