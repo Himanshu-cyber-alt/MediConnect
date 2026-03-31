@@ -1,0 +1,22 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Background Circle -->
+  <circle cx="100" cy="100" r="90" fill="#000000"/>
+
+  <!-- Medical Cross -->
+  <rect x="85" y="50" width="30" height="100" rx="8" fill="#22c55e"/>
+  <rect x="50" y="85" width="100" height="30" rx="8" fill="#22c55e"/>
+
+  <!-- Connection Dots -->
+  <circle cx="100" cy="30" r="6" fill="#4ade80"/>
+  <circle cx="170" cy="100" r="6" fill="#4ade80"/>
+  <circle cx="100" cy="170" r="6" fill="#4ade80"/>
+  <circle cx="30" cy="100" r="6" fill="#4ade80"/>
+
+  <!-- Connection Lines -->
+  <line x1="100" y1="50" x2="100" y2="30" stroke="#4ade80" stroke-width="2"/>
+  <line x1="150" y1="100" x2="170" y2="100" stroke="#4ade80" stroke-width="2"/>
+  <line x1="100" y1="150" x2="100" y2="170" stroke="#4ade80" stroke-width="2"/>
+  <line x1="50" y1="100" x2="30" y2="100" stroke="#4ade80" stroke-width="2"/>
+
+</svg>
