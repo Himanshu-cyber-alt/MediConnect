@@ -1,16 +1,831 @@
-# React + Vite
+# MediConnect Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend of **MediConnect**, an AI-powered healthcare assistance platform.
 
-Currently, two official plugins are available:
+The frontend is built with **React and Vite** and communicates with the MediConnect backend through APIs. It provides the user interface for patients and doctors, including authentication, dashboards, appointments, medical information, and other healthcare-related functionality.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+For deployment, I hosted the production frontend on **Amazon S3** and automated the deployment using **GitHub Actions**.
 
-## React Compiler
+The CI/CD pipeline uses **GitHub OIDC and AWS IAM roles**, so GitHub Actions can access AWS without storing long-lived AWS access keys.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+# What I Built
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+I first developed and tested the React application locally.
+
+After confirming that the application worked, I created a production build and deployed it to Amazon S3.
+
+The final deployment flow is:
+
+```text id="6x4m2p"
+React + Vite
+     │
+     ▼
+npm ci
+     │
+     ▼
+Create .env
+     │
+     ▼
+npm run build
+     │
+     ▼
+dist/
+     │
+     ▼
+Amazon S3
+     │
+     ▼
+Live Website
+```
+
+After setting up CI/CD:
+
+```text id="8v2k5q"
+Developer
+    │
+    │ git push origin main
+    ▼
+GitHub Repository
+    │
+    ▼
+GitHub Actions
+    │
+    ├── Checkout code
+    ├── Setup Node.js
+    ├── Install dependencies
+    ├── Create .env from GitHub Secret
+    ├── Build React application
+    │
+    ▼
+GitHub OIDC
+    │
+    ▼
+AWS IAM Role
+    │
+    ▼
+Amazon S3
+    │
+    ▼
+Updated Website
+```
+
+---
+
+# Tech Stack
+
+## Frontend
+
+* React.js
+* Vite
+* Redux Toolkit
+* React Router
+* Tailwind CSS
+* Axios
+
+## Authentication / Services
+
+* Firebase
+
+## AWS
+
+* Amazon S3
+* AWS IAM
+* GitHub OIDC
+
+## CI/CD
+
+* GitHub Actions
+* AWS CLI
+* npm
+* Git
+* GitHub
+
+---
+
+# 1. Running the Frontend Locally
+
+I first run the application locally to make sure the frontend and backend integration are working before deploying anything.
+
+Clone the repository:
+
+```bash id="2m7q8x"
+git clone https://github.com/Himanshu-cyber-alt/MediConnect.git
+```
+
+Move into the project:
+
+```bash id="4p9k1v"
+cd MediConnect
+```
+
+Install the dependencies:
+
+```bash id="7x3m5q"
+npm install
+```
+
+The project uses environment variables for configuration.
+
+For local development, these values are provided through a `.env` file.
+
+The `.env` file is not committed to GitHub.
+
+---
+
+# 2. Environment Variables
+
+The frontend requires environment variables such as the backend API URL and frontend service configuration.
+
+For example:
+
+```env id="9q2v6m"
+VITE_API_URL
+```
+
+along with the other required `VITE_` variables.
+
+I don't store the production `.env` file in the repository.
+
+Instead, I store the required environment configuration in **GitHub Secrets**.
+
+For MediConnect, I use a single secret:
+
+```text id="5n8r2k"
+VITE_ENV
+```
+
+This secret contains the frontend environment configuration.
+
+---
+
+# 3. Why Create `.env` During CI/CD?
+
+GitHub Actions needs the environment variables when creating the production build.
+
+The pipeline therefore creates the `.env` file during the workflow:
+
+```yaml id="k8v4m2"
+- name: Create frontend environment file
+  run: |
+    echo '${{ secrets.VITE_ENV }}' > .env
+```
+
+The process is:
+
+```text id="3m7x9p"
+GitHub Secret
+     │
+     ▼
+GitHub Actions
+     │
+     ▼
+.env
+     │
+     ▼
+npm run build
+     │
+     ▼
+dist/
+```
+
+This allows the production build to use the required configuration without committing the `.env` file to the repository.
+
+---
+
+# 4. Creating the Production Build
+
+After installing the dependencies, I create the production build:
+
+```bash id="5q8m1x"
+npm run build
+```
+
+Vite generates a `dist/` directory.
+
+```text id="7k2v4m"
+dist/
+├── assets/
+├── index.html
+└── ...
+```
+
+The `dist/` directory contains the production-ready static files.
+
+These are the files that are deployed to S3.
+
+---
+
+# 5. Why Amazon S3?
+
+After the React application is built, it becomes a collection of static files.
+
+There is no need to run the React development server in production.
+
+So I used **Amazon S3 Static Website Hosting**.
+
+The basic idea is:
+
+```text id="2r6m8v"
+React Source Code
+       │
+       ▼
+npm run build
+       │
+       ▼
+Production Files
+       │
+       ▼
+Amazon S3
+       │
+       ▼
+Website
+```
+
+S3 stores and serves the generated frontend files.
+
+---
+
+# 6. Creating the S3 Bucket
+
+I created an S3 bucket for the MediConnect frontend:
+
+```text id="q8m3v1"
+mediconnect-health-application
+```
+
+The bucket is used to store the production build generated by Vite.
+
+The deployment command later synchronizes the `dist/` directory with this bucket.
+
+---
+
+# 7. S3 Static Website Hosting
+
+The S3 bucket is configured for static website hosting.
+
+The main document is:
+
+```text id="x5n7k2"
+index.html
+```
+
+The React application is then served from the S3 website endpoint.
+
+The important point is that S3 is serving the **built frontend**, not the original React source code.
+
+---
+
+# 8. Manually Understanding the Deployment
+
+Before automating the process, the basic deployment idea is:
+
+```bash id="h4m8q2"
+npm run build
+```
+
+This creates:
+
+```text id="1p7x5v"
+dist/
+```
+
+Then the production files can be synchronized with S3:
+
+```bash id="6k2n9r"
+aws s3 sync dist/ s3://mediconnect-health-application
+```
+
+Instead of manually running this every time I change the application, I automated it using GitHub Actions.
+
+---
+
+# 9. GitHub OIDC
+
+GitHub Actions needs AWS permissions to upload the production files to S3.
+
+Instead of storing long-lived AWS access keys in GitHub, I used **GitHub OIDC**.
+
+The authentication flow is:
+
+```text id="9x5m3q"
+GitHub Actions
+      │
+      │ OIDC Token
+      ▼
+AWS IAM
+      │
+      │ Assume Role
+      ▼
+Temporary AWS Credentials
+      │
+      ▼
+Amazon S3
+```
+
+This allows GitHub Actions to authenticate with AWS through an IAM role.
+
+---
+
+# 10. GitHub Actions Permissions
+
+The workflow contains:
+
+```yaml id="7m4p8x"
+permissions:
+  id-token: write
+  contents: read
+```
+
+### `contents: read`
+
+Allows GitHub Actions to read and check out the repository.
+
+### `id-token: write`
+
+Allows GitHub Actions to request an OIDC identity token.
+
+AWS uses this identity to allow the workflow to assume the configured IAM role.
+
+---
+
+# 11. IAM Role
+
+I created an IAM role that GitHub Actions can assume.
+
+The trust relationship is configured so that the intended GitHub repository and branch can use the role.
+
+Conceptually:
+
+```text id="3q8m1v"
+GitHub Actions
+      │
+      ▼
+GitHub OIDC
+      │
+      ▼
+IAM Trust Policy
+      │
+      ▼
+Allowed Repository / Branch
+      │
+      ▼
+IAM Role
+      │
+      ▼
+S3 Permissions
+```
+
+This avoids putting AWS access keys directly into the GitHub repository.
+
+---
+
+# 12. GitHub Actions Trigger
+
+The deployment workflow runs when code is pushed to the `main` branch:
+
+```yaml id="8n2v5m"
+on:
+  push:
+    branches:
+      - main
+```
+
+So after making a change, I can simply run:
+
+```bash id="5v9k3x"
+git add .
+git commit -m "Update frontend"
+git push origin main
+```
+
+GitHub Actions automatically starts the deployment.
+
+---
+
+# 13. CI/CD Workflow
+
+The MediConnect frontend pipeline follows these steps:
+
+```text id="1x7m4q"
+Push to main
+     ↓
+Checkout code
+     ↓
+Setup Node.js
+     ↓
+npm ci
+     ↓
+Create .env
+     ↓
+npm run build
+     ↓
+Authenticate with AWS using OIDC
+     ↓
+Assume IAM Role
+     ↓
+Upload dist/ to S3
+     ↓
+Updated Website
+```
+
+---
+
+# 14. Complete GitHub Actions Workflow
+
+The actual workflow is:
+
+```yaml id="m8q3v6"
+name: Deploy React Frontend to S3
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Get code from GitHub
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create frontend environment file
+        run: |
+          echo '${{ secrets.VITE_ENV }}' > .env
+
+      - name: build code
+        run: npm run build
+
+      - name: access aws
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ap-south-1
+
+      - name: deploy to s3
+        run: aws s3 sync dist/ s3://mediconnect-health-application --delete
+```
+
+---
+
+# 15. Understanding Each Workflow Step
+
+## Checkout Code
+
+```yaml id="z5m2q7"
+uses: actions/checkout@v4
+```
+
+Downloads the repository code onto the GitHub Actions runner.
+
+Without this step, the runner would not have the React source code.
+
+---
+
+## Setup Node.js
+
+```yaml id="q8x3m6"
+uses: actions/setup-node@v4
+```
+
+Installs/configures Node.js on the GitHub Actions runner.
+
+The workflow uses Node.js `24`.
+
+It also enables npm caching:
+
+```yaml id="k4v7n2"
+cache: npm
+```
+
+---
+
+## Install Dependencies
+
+```bash id="m6q2x8"
+npm ci
+```
+
+Installs the dependencies from `package-lock.json`.
+
+I use `npm ci` in CI/CD because the deployment should use the locked dependency versions.
+
+---
+
+## Create `.env`
+
+```bash id="r3m8v5"
+echo '${{ secrets.VITE_ENV }}' > .env
+```
+
+Creates the environment file using the value stored in GitHub Secrets.
+
+This happens before the production build because Vite needs the environment variables during the build process.
+
+---
+
+## Build
+
+```bash id="v7k2m4"
+npm run build
+```
+
+Creates the production-ready `dist/` directory.
+
+---
+
+## Authenticate With AWS
+
+```yaml id="p5n8x3"
+uses: aws-actions/configure-aws-credentials@v4
+```
+
+The workflow uses:
+
+```yaml id="c6m2q9"
+role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+aws-region: ap-south-1
+```
+
+This allows GitHub Actions to obtain temporary AWS credentials through the IAM role.
+
+---
+
+## Deploy to S3
+
+```bash id="w4k9m2"
+aws s3 sync dist/ s3://mediconnect-health-application --delete
+```
+
+This synchronizes the production build with the S3 bucket.
+
+---
+
+# 16. Why `aws s3 sync`?
+
+Instead of manually uploading every file, I use:
+
+```bash id="j7m3q8"
+aws s3 sync
+```
+
+It compares the local `dist/` directory with the S3 bucket and uploads the required files.
+
+The deployment also uses:
+
+```text id="v5x8n2"
+--delete
+```
+
+This removes files from the S3 bucket that are no longer present in the latest production build.
+
+For example:
+
+```text id="6q2m8x"
+Old build:
+dist/
+├── index.html
+├── app.js
+└── old.js
+
+New build:
+dist/
+├── index.html
+└── app.js
+```
+
+With `--delete`, the obsolete `old.js` file is also removed from S3.
+
+This keeps the S3 bucket synchronized with the current build.
+
+---
+
+# 17. Backend Integration
+
+The frontend communicates with the MediConnect backend through APIs.
+
+The basic architecture is:
+
+```text id="3v8m5q"
+User
+ │
+ ▼
+React Frontend
+ │
+ │ API Requests
+ ▼
+Node.js + Express Backend
+ │
+ ├── PostgreSQL
+ │
+ └── AI/ML Services
+```
+
+The backend API URL is provided through the frontend environment configuration.
+
+---
+
+# 18. Final Deployment Architecture
+
+The complete frontend deployment looks like this:
+
+```text id="7m2q9x"
+                       Developer
+                           │
+                           │ git push
+                           ▼
+                   GitHub Repository
+                           │
+                           ▼
+                    GitHub Actions
+                           │
+                    ┌──────┴──────┐
+                    │             │
+                Checkout       OIDC
+                    │             │
+                    ▼             ▼
+                 npm ci       AWS IAM
+                    │             │
+                    └──────┬──────┘
+                           │
+                     Create .env
+                           │
+                           ▼
+                    npm run build
+                           │
+                           ▼
+                         dist/
+                           │
+                           ▼
+                    Amazon S3 Bucket
+                           │
+                           ▼
+                   MediConnect Website
+```
+
+---
+
+# 19. Why This Deployment?
+
+The main goal was to automate the process.
+
+### Before CI/CD
+
+```text id="4m8x2q"
+Change React Code
+       ↓
+npm run build
+       ↓
+Upload files manually
+       ↓
+Update website
+```
+
+### After CI/CD
+
+```text id="8q2m5v"
+Change React Code
+       ↓
+git push origin main
+       ↓
+GitHub Actions
+       ↓
+npm ci
+       ↓
+Create .env
+       ↓
+npm run build
+       ↓
+OIDC → IAM
+       ↓
+S3 Sync
+       ↓
+Updated Website
+```
+
+This means I don't have to manually build and upload the frontend every time I make a change.
+
+---
+
+# 20. Security
+
+The production `.env` file is not committed to the repository.
+
+Sensitive configuration is stored in GitHub Secrets.
+
+AWS authentication is handled using:
+
+```text id="2m7x9q"
+GitHub OIDC
+      ↓
+AWS IAM Role
+      ↓
+Temporary Credentials
+```
+
+rather than storing long-lived AWS access keys.
+
+The `AWS_ROLE_ARN` is referenced through GitHub Secrets, and the frontend environment configuration is provided through the `VITE_ENV` secret.
+
+---
+
+# 21. Useful Commands
+
+### Install dependencies
+
+```bash id="8x3m7q"
+npm install
+```
+
+### Install dependencies in CI
+
+```bash id="5q9v2m"
+npm ci
+```
+
+### Start development server
+
+```bash id="1m6x8q"
+npm run dev
+```
+
+### Create production build
+
+```bash id="7v3m9x"
+npm run build
+```
+
+### Preview production build
+
+```bash id="2q8m5v"
+npm run preview
+```
+
+### Deploy build to S3 manually
+
+```bash id="9m4x7q"
+aws s3 sync dist/ s3://mediconnect-health-application --delete
+```
+
+---
+
+# 22. What I Learned
+
+Through this deployment I learned how to take a React application from development to a production deployment on AWS.
+
+The main things I worked with were:
+
+* React/Vite production builds
+* Amazon S3 Static Website Hosting
+* AWS IAM
+* IAM roles
+* GitHub OIDC
+* GitHub Actions
+* CI/CD pipelines
+* AWS CLI
+* Environment variables
+* GitHub Secrets
+* Automated S3 synchronization
+* Production deployment workflow
+
+The most important part was understanding the complete deployment process:
+
+```text id="6v2m8q"
+Application
+    ↓
+Production Build
+    ↓
+AWS
+    ↓
+CI/CD
+    ↓
+Automated Deployment
+```
+
+---
+
+## Repository
+
+**MediConnect Frontend:**
+https://github.com/Himanshu-cyber-alt/MediConnect
+
+## Author
+
+**Himanshu Pagare**
