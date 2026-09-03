@@ -68,7 +68,7 @@ export default function AIAssistant() {
       setDoctors([]);
 
       // ✅ FIX: Use Promise.all to wait for BOTH the API and the 10-second timer
-      const apiCall = axios.post("http://3.110.224.232:8002/predict", {
+      const apiCall = axios.post("http://13.232.47.103:5001/predict", {
         symptoms: selectedSymptoms,
       });
 
