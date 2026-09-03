@@ -193,7 +193,7 @@ import { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import { Phone, PhoneOff } from "lucide-react";
 
-const socket = io("http://3.110.224.232:8001");
+const socket = io("http://13.232.47.103:5000");
 
 export default function DoctorDashboard() {
   const doctorEmail = localStorage.getItem("doctor_email");;

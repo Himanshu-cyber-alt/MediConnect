@@ -26,7 +26,7 @@ export default function Profile() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await fetch(`http://3.110.224.232:8001/api/patients/${patientId}`);
+        const res = await fetch(`http://13.232.47.103:5000/api/patients/${patientId}`);
         const data = await res.json();
         setProfile(data || {});
       } catch (err) {
@@ -44,7 +44,7 @@ export default function Profile() {
 
   const handleUpdate = async () => {
     try {
-      const res = await fetch(`http://3.110.224.232:8001/api/patients/${patientId}`, {
+      const res = await fetch(`http://13.232.47.103:5000/api/patients/${patientId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(profile),

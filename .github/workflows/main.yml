@@ -1,20 +1,48 @@
-name: CI/CD Pipeline
+name: Deploy React Frontend to S3
 
 on:
   push:
     branches:
-      - main 
+      - main
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Get code from GitHub
+        uses: actions/checkout@v4
 
-      - name: Trigger Render Deploy
-        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
 
-      - name: Done
-        run: echo "Deployment is happen"
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create frontend environment file
+        run: |
+          echo '${{ secrets.VITE_ENV }}' > .env
+
+
+      - name: build code
+        run: npm run build
+
+      - name: access aws
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ap-south-1
+
+      - name: deploy to s3
+        run: aws s3 sync dist/ s3://mediconnect-health-application --delete
+
+
+      
+

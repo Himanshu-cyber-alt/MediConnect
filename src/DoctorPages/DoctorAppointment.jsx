@@ -24,7 +24,7 @@ export default function MyAppointment() {
 
         console.log(email)
      
-        const res = await fetch(`http://3.110.224.232:8001/api/doctorappointments/${encodeURIComponent(email)}`);
+        const res = await fetch(`http://13.232.47.103:5000/api/doctorappointments/${encodeURIComponent(email)}`);
         if (!res.ok) throw new Error("Failed to fetch appointments.");
         
         const data = await res.json();

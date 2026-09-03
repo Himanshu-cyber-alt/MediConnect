@@ -92,7 +92,7 @@ export default function AIAssistant() {
       setLoadingDoctors(true);
       
       // ✅ FIX: Add a 5-second artificial delay for finding doctors
-      const apiCall = axios.get("http://3.110.224.232:8001/api/doctors");
+      const apiCall = axios.get("http://13.232.47.103:5000/api/doctors");
       const delay = new Promise((resolve) => setTimeout(resolve, 2000)); // 5 Second Delay
 
       const [res] = await Promise.all([apiCall, delay]);

@@ -80,7 +80,7 @@ export const firebaseRegister = createAsyncThunk(
       const idToken = await result.user.getIdToken();
           
       const res = await axios.post(
-        "http://3.110.224.232:8001/api/auth/firebase",
+        "http://13.232.47.103:5000/api/auth/firebase",
         { token: idToken }
       );
      
