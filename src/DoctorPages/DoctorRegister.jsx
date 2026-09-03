@@ -81,7 +81,7 @@ const DoctorRegister = () => {
     setMessage("");
 
     try {
-      const res = await fetch("https://mediconnect-server-mgnb.onrender.com/api/doctors/register", {
+      const res = await fetch("http://3.110.224.232:8001/api/doctors/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

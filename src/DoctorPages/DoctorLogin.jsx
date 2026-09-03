@@ -20,7 +20,7 @@ const DoctorLogin = () => {
     setMessage("");
 
     try {
-      const res = await fetch("https://mediconnect-server-mgnb.onrender.com/api/doctors/login", {
+      const res = await fetch("http://3.110.224.232:8001/api/doctors/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

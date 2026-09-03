@@ -57,7 +57,7 @@ const TakeInfo = () => {
 
     setLoading(true);
     try {
-      const res = await fetch("https://mediconnect-server-mgnb.onrender.com/api/patient/profile", {
+      const res = await fetch("http://3.110.224.232:8001/api/patient/profile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...formData, patient_id: patientId }),

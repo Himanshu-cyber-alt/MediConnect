@@ -68,7 +68,7 @@ export default function AIAssistant() {
       setDoctors([]);
 
       // ✅ FIX: Use Promise.all to wait for BOTH the API and the 10-second timer
-      const apiCall = axios.post("https://smart-health-ai-sxie.onrender.com/predict", {
+      const apiCall = axios.post("http://3.110.224.232:8002/predict", {
         symptoms: selectedSymptoms,
       });
 
@@ -92,7 +92,7 @@ export default function AIAssistant() {
       setLoadingDoctors(true);
       
       // ✅ FIX: Add a 5-second artificial delay for finding doctors
-      const apiCall = axios.get("https://mediconnect-server-mgnb.onrender.com/api/doctors");
+      const apiCall = axios.get("http://3.110.224.232:8001/api/doctors");
       const delay = new Promise((resolve) => setTimeout(resolve, 2000)); // 5 Second Delay
 
       const [res] = await Promise.all([apiCall, delay]);
